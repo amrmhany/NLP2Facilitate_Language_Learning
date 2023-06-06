@@ -1,0 +1,41 @@
+# Import necessary libraries
+import nltk
+nltk.download('wordnet')
+nltk.download('stopwords')
+nltk.download('punkt')
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer, PorterStemmer
+from collections import Counter
+import string
+
+# Step 1: Read the text file
+with open(r'D:/.City U/2023/Assi/Assi/xxx/text_file.txt', 'r') as file:
+    text = file.read()
+
+# Step 2: Tokenize the text into words
+words = nltk.word_tokenize(text)
+
+# Step 3: Convert all words to lowercase
+words = [word.lower() for word in words]
+
+# Step 4: Remove stop words, numbers, and punctuation marks
+stop_words = set(stopwords.words('english'))
+punctuation_marks = set(string.punctuation)
+words = [word for word in words if word not in stop_words and not any(char.isdigit() for char in word) and not any(punc in word for punc in punctuation_marks)]
+
+# Step 5: Stem the words
+stemmer = PorterStemmer()
+words = [stemmer.stem(word) for word in words]
+
+# Step 6: Count word frequencies
+word_counts = Counter(words)
+
+# Step 7: Sort words by frequency
+sorted_words = sorted(word_counts.items(), key=lambda pair: pair[1], reverse=True)
+
+# Step 8: Get the most common 1000 words
+most_common_words = sorted_words[:1000]
+
+# Step 9: Print the most common 1000 words
+for word, freq in most_common_words:
+    print(f"{word} ({freq})")
